@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
-import { useForm, type FieldErrors } from "react-hook-form";
+import { useForm, useWatch, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, m } from "motion/react";
 import { ChevronDown, CircleAlert, CircleCheck, LoaderCircle } from "lucide-react";
@@ -14,6 +14,7 @@ import {
   type ContactInput,
 } from "@/lib/validation/contact";
 import type { ContactApiResponse } from "@/app/api/contact/route";
+import { BRIEF_HANDOFF_KEY } from "@/lib/brief/format";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 
@@ -88,6 +89,7 @@ export function ContactForm({ publicEmail, schedulingUrl }: { publicEmail?: stri
   const searchParams = useSearchParams();
   const preset = searchParams.get("service");
   const initialInterest = preset && preset in interestOptions ? (preset as ContactInput["interest"]) : undefined;
+  const fromBrief = searchParams.get("from") === "brief";
 
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [startedAt] = useState(() => Date.now());
@@ -99,6 +101,8 @@ export function ContactForm({ publicEmail, schedulingUrl }: { publicEmail?: stri
     register,
     handleSubmit,
     setError,
+    setValue,
+    control,
     reset,
     formState: { errors },
   } = useForm<ContactInput>({
@@ -119,6 +123,25 @@ export function ContactForm({ publicEmail, schedulingUrl }: { publicEmail?: stri
       website: "",
     },
   });
+
+  // Arriving from the brief assistant: pre-fill the message and top service once.
+  useEffect(() => {
+    if (!fromBrief) return;
+    try {
+      const raw = sessionStorage.getItem(BRIEF_HANDOFF_KEY);
+      if (!raw) return;
+      const handoff = JSON.parse(raw) as { message?: unknown; service?: unknown };
+      if (typeof handoff.message === "string") setValue("message", handoff.message.slice(0, 4000));
+      if (typeof handoff.service === "string" && handoff.service in interestOptions) {
+        setValue("interest", handoff.service as ContactInput["interest"]);
+      }
+      sessionStorage.removeItem(BRIEF_HANDOFF_KEY);
+    } catch {
+      /* storage unavailable or malformed: leave the form empty */
+    }
+  }, [fromBrief, setValue]);
+  const message = useWatch({ control, name: "message" });
+  const briefIncluded = fromBrief && (message ?? "").startsWith("Project brief:");
 
   useEffect(() => {
     if (summary.length) summaryRef.current?.focus();
@@ -201,6 +224,13 @@ export function ContactForm({ publicEmail, schedulingUrl }: { publicEmail?: stri
       <p id="form-required-note" className="text-xs text-fg-subtle">
         Fields marked <span className="text-mint">*</span> are required.
       </p>
+
+      {briefIncluded && (
+        <p className="flex items-center gap-2 rounded-md border border-mint/30 bg-mint/[0.06] px-3 py-2 text-sm text-fg" data-testid="brief-included">
+          <span aria-hidden="true" className="size-1.5 rounded-full bg-mint" />
+          Your AI-drafted brief is included in the message below. Edit it as you like.
+        </p>
+      )}
 
       <AnimatePresence>
         {summary.length > 0 && (
