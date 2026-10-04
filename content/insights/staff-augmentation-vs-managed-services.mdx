@@ -1,0 +1,150 @@
+export const meta = {
+  title: "The difference between staff augmentation and managed services",
+  excerpt: "Staff augmentation adds people. Managed services transfers responsibility. Here is how to tell which one you need, and how to avoid paying for one while expecting the other.",
+  category: "Outsourcing",
+  publishedAt: "2026-09-15",
+  readingTime: "8 min read",
+  author: "Domiutra",
+}
+
+Staff augmentation and managed services are often discussed as if they were pricing options for the same thing. They are not. They represent different answers to one question: who is responsible for the result?
+
+Getting this wrong is expensive in both directions. Companies buy augmentation, then expect the vendor to own outcomes it was never asked to manage. Others buy managed services, then direct every task themselves and wonder why they are paying for a delivery layer they never use.
+
+<KeyTakeaways items={[
+  "Staff augmentation buys capacity. You direct the work and own the outcome.",
+  "Managed services buys responsibility. The provider manages the work against agreed outcomes or service levels.",
+  "Time-and-materials pricing fits augmentation. Service levels and fixed or capacity-based fees fit managed services.",
+  "Hybrid models work well when the boundary between them is explicit.",
+  "Moving from one model to the other is a change in accountability, not just a contract amendment.",
+]} />
+
+## The core difference: who owns the result
+
+In **staff augmentation**, the vendor supplies qualified engineers who join your team. Your managers assign work, set standards, review output, and decide what ships. The vendor is responsible for recruiting, retaining, and replacing people. It is not responsible for whether your project succeeds.
+
+In **managed services**, the provider takes responsibility for a defined scope. That might be operating an application, running a platform, maintaining a set of systems, or delivering a product workstream. You define what good looks like, usually through outcomes or service levels. The provider decides how to staff and run the work to meet them.
+
+A quick test: when something goes wrong, who is expected to diagnose it, fix it, and explain it to you? If the answer is your own engineering manager, you are buying augmentation. If it is the provider's delivery lead, you are buying a managed service.
+
+## Responsibility split
+
+| Responsibility | Staff augmentation | Managed services |
+|---|---|---|
+| Defining priorities and outcomes | Client | Client |
+| Assigning daily tasks | Client | Provider |
+| Engineering process and standards | Client | Provider, aligned with client policies |
+| Code review and quality gates | Client | Provider, with client oversight |
+| Team composition and size | Client requests specific roles | Provider decides within agreed scope |
+| Performance management | Shared; client flags, vendor acts | Provider |
+| Delivery reporting | Client tracks internally | Provider reports against agreed measures |
+| Incident response | Client leads | Provider leads within agreed scope |
+| Knowledge retention | Client must capture it | Provider must maintain it and hand it over on exit |
+| Accountability for results | Client | Provider, within the agreed scope |
+
+Notice that the client always owns priorities. Even in a fully managed arrangement, someone on your side must decide what matters and accept the work.
+
+## Commercial structure
+
+The commercial model follows from the responsibility split.
+
+**Time and materials** is the norm for augmentation. You pay for hours or days worked at agreed rates. This is simple and flexible. It also puts all delivery risk on you, because the vendor is paid the same whether the work succeeds or not.
+
+**Managed services** typically use one of these structures:
+
+- **Fixed monthly fee** for a defined scope, such as operating and supporting a set of applications.
+- **Capacity-based fee** for a team with agreed size and skills, combined with delivery commitments.
+- **Outcome or milestone pricing** for defined deliverables.
+- **Service-level arrangements** where fees are tied to measurable commitments, sometimes with service credits if levels are missed.
+
+Each structure shifts some risk to the provider, and the provider will price that risk in. A managed service is not necessarily cheaper or more expensive than augmentation. You are paying for something different.
+
+## SLAs versus time and materials
+
+Service level agreements only make sense when the provider controls the work that determines whether the level is met. You cannot reasonably hold a vendor to a response-time commitment if your own team decides what gets worked on and when.
+
+Good SLAs are specific, measurable, and within the provider's control. Examples include:
+
+- Time to acknowledge and begin work on incidents, by severity
+- Time to restore service for defined severity levels
+- Availability of a managed platform, measured in an agreed way
+- Turnaround on defined request types, such as access changes or minor enhancements
+
+Poor SLAs are vague ("high quality code") or measure activity rather than results ("number of tickets closed"). Ticket counts in particular encourage splitting work into smaller tickets rather than solving problems.
+
+<Callout title="A test for any proposed SLA">
+Ask three questions. Can we measure it without debate? Does the provider control what it depends on? Would meeting it actually make our business better? If any answer is no, rewrite it.
+</Callout>
+
+## When each model fits
+
+**Staff augmentation fits when:**
+
+- You have strong engineering management with time to direct more people.
+- Your processes, tooling, and standards are mature.
+- The need is for specific skills or short-term capacity.
+- You want maximum control over how the work is done.
+- The work is tightly coupled with your internal team's work.
+
+**Managed services fit when:**
+
+- You want to free internal leaders from managing a body of work.
+- The scope can be defined well enough to measure.
+- The work is operational or ongoing, such as application support, platform operations, or QA.
+- You lack internal depth in the area and do not plan to build it.
+- You want a single accountable party for a set of outcomes.
+
+## Hybrid models
+
+Many organizations use both, and that is often the right answer. The common patterns are:
+
+- **Augmented core, managed edges.** Your internal team, supplemented with augmented engineers, builds the core product. A managed service runs supporting functions such as test automation, cloud operations, or legacy system maintenance.
+- **Managed team with embedded client leads.** The provider runs a delivery team end to end, while your product owner and architect sit inside it to keep alignment.
+- **Phased ownership.** A provider delivers a project, then transitions to a managed service for ongoing operation.
+
+The risk with hybrids is blurred boundaries. If an augmented engineer and a managed team both touch the same system, define who owns incidents, releases, and code quality there. Otherwise, problems fall between the two arrangements.
+
+## Transitioning between models
+
+Companies often start with augmentation and later want to move to a managed model, or the reverse. Treat this as a change of accountability with its own plan.
+
+**Moving from augmentation to managed services:**
+
+1. Define the scope and the measures you will use to judge it.
+2. Establish a baseline for those measures before the switch, so improvement or decline is visible.
+3. Identify a delivery lead on the provider side who will own the work.
+4. Agree on a transition period where both models overlap and responsibility moves in stages.
+5. Remove your managers from daily task assignment once the handover is complete. Staying involved at that level undermines the model you are paying for.
+
+**Moving from managed services to augmentation or in-house:**
+
+1. Request complete documentation, runbooks, and access inventories.
+2. Plan knowledge transfer sessions with the people who actually do the work.
+3. Run a shadow period where your team operates with the provider available for support.
+4. Confirm all credentials, repositories, and accounts are transferred and old access is revoked.
+
+Your contract should anticipate both directions. Transition assistance obligations are much easier to agree at the start than at the end.
+
+## Common mistakes
+
+**Buying augmentation and expecting ownership.** If you buy hours, the vendor is obliged to provide hours. Expecting it to own architecture or delivery without paying for that leadership leads to disappointment on both sides.
+
+**Buying managed services and micromanaging.** If your managers direct every task, you are paying for delivery management you are not using, and the provider cannot be held to outcomes it does not control.
+
+**Writing SLAs the provider cannot control.** Commitments that depend on your team's decisions or your systems create disputes, not accountability.
+
+**Skipping the baseline.** Without measures from before the engagement, nobody can say whether things improved.
+
+**Ignoring knowledge capture.** In augmentation especially, knowledge walks out the door with every departing contractor unless you require documentation as part of the work.
+
+**Choosing on hourly rate alone.** Rate is easy to compare and often misleading. A lower rate with weak delivery management can cost more in rework, management overhead, and delay than a higher rate with clear accountability.
+
+<Callout title="Questions to settle before signing">
+Who assigns daily work? Who decides when something is done? Who leads when production breaks? What do we measure, and who reports it? What happens to knowledge and access when the arrangement ends?
+</Callout>
+
+## Choosing with clarity
+
+Neither model is superior. The right choice depends on how much management capacity you have, how well you can define the work, and where you want accountability to sit. What matters most is that both parties understand which model they are in and act accordingly.
+
+Domiutra offers both augmented and managed arrangements, and helps clients define the boundary between them. You can compare the options on our [engagement models](/engagement-models) page.

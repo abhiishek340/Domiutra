@@ -1,0 +1,150 @@
+export const meta = {
+  title: "When application modernization makes financial sense",
+  excerpt: "A practical framework for weighing the cost of standing still against the cost of change, with options compared and a worked business-case example.",
+  category: "Modernization",
+  publishedAt: "2026-09-29",
+  readingTime: "9 min read",
+  author: "Domiutra",
+}
+
+Legacy applications rarely fail all at once. They get slower to change, harder to staff, more expensive to run, and riskier to touch. Because the decline is gradual, the cost of standing still is easy to underestimate and hard to put in a budget request.
+
+Modernization is not automatically the right answer either. Plenty of projects have spent large sums rebuilding systems that only needed a smaller fix. This article offers a way to weigh both sides with numbers you can calculate from your own environment.
+
+<KeyTakeaways items={[
+  "The cost of standing still is real but spread across incidents, slow change, staffing, licensing, infrastructure, and risk.",
+  "Modernization is a range of options, from rehosting to retiring. The cheapest option that solves the actual problem usually wins.",
+  "Build the business case from your own numbers: current run cost, change cost, and risk exposure against one-time and ongoing modernization costs.",
+  "Incremental approaches such as the strangler fig pattern reduce risk and deliver value earlier.",
+  "Some systems should not be modernized. Stable, low-change, low-risk applications can be left alone.",
+]} />
+
+## The cost of standing still
+
+Start by making current costs visible. Most organizations track some of these but rarely add them together.
+
+**Incidents and outages.** Count the incidents tied to the application, the hours spent responding, and the business impact of downtime. Include the time of people pulled away from planned work.
+
+**Change lead time.** Measure how long a typical change takes from request to production. Slow change has a cost in delayed revenue, missed opportunities, and workarounds built elsewhere.
+
+**Talent.** Older technology stacks can be harder to hire for and retain. Knowledge often sits with a few people, which creates key-person risk and slows onboarding.
+
+**Licensing.** Legacy platforms may carry license or support fees that grow over time, or require extended support contracts once versions reach end of life.
+
+**Infrastructure.** Applications that cannot scale elastically often run on oversized or dedicated hardware. Data center contracts and hardware refresh cycles add cost.
+
+**Risk.** Unsupported software may not receive security patches. Compliance requirements may be harder to meet. Integration with modern systems may require brittle custom code.
+
+You will not get a precise number for each. A reasonable estimate with stated assumptions is far more useful than no estimate.
+
+## Modernization options compared
+
+Modernization covers a wide range of approaches. They differ in cost, risk, and the problems they solve.
+
+| Option | What it means | Relative cost | Relative risk | When it fits |
+|---|---|---|---|---|
+| Retire | Decommission the application | Low | Low to medium | Functionality is unused or duplicated elsewhere |
+| Rehost | Move as-is to new infrastructure, often cloud | Low | Low | Infrastructure is the main problem; code is acceptable |
+| Replatform | Move with modest changes, such as a managed database or container runtime | Low to medium | Low to medium | You want operational gains without rewriting logic |
+| Refactor | Restructure code without changing behavior | Medium | Medium | Code quality slows change, but architecture is sound |
+| Rearchitect | Change the structure significantly, such as splitting components or changing data flows | High | Medium to high | Architecture blocks scaling, integration, or team independence |
+| Rebuild | Rewrite from scratch | High | High | Code and architecture are both unworkable and requirements are well understood |
+| Replace | Adopt a commercial or SaaS product | Varies | Medium | The capability is not differentiating and a good product exists |
+
+Most real programs combine several options. A portfolio might retire some applications, rehost others, and refactor or rearchitect the few that matter most.
+
+<Callout title="Start with the problem, not the option">
+Name the specific problem first: cost, speed of change, reliability, scalability, security, or staffing. Then choose the least disruptive option that solves it. Rebuilding is often chosen because it feels decisive, not because it is needed.
+</Callout>
+
+## A simple business-case framework
+
+A modernization business case compares two futures over a defined period, typically three to five years.
+
+**Future A: Standing still.** Annual run cost plus annual cost of change plus expected cost of risk.
+
+**Future B: Modernizing.** One-time modernization cost plus the new annual run cost plus new annual cost of change plus the new expected cost of risk.
+
+The components are:
+
+- **Run cost:** infrastructure, licensing, support contracts, and operations staff time.
+- **Cost of change:** engineering effort spent on enhancements and maintenance, plus the business cost of slow delivery if you can estimate it.
+- **Expected cost of risk:** the estimated likelihood of a significant event, such as a major outage or security incident, multiplied by its estimated impact.
+- **One-time cost:** engineering, testing, migration, training, parallel running, and contingency.
+
+Payback period is the one-time cost divided by the annual savings. If payback falls well within the period and the risk reduction is meaningful, the case is usually strong.
+
+### A hypothetical worked example
+
+The following numbers are illustrative only. They are round figures chosen to show the method, not benchmarks or typical results.
+
+Imagine a company running an internal order management application on aging, self-managed infrastructure.
+
+**Standing still, per year (hypothetical):**
+
+- Run cost: 400,000 in infrastructure, licenses, and support
+- Cost of change: 600,000 in engineering effort for maintenance and enhancements
+- Expected cost of risk: a 10 percent estimated annual chance of a major incident costing 1,000,000, giving an expected cost of 100,000
+
+Total: 1,100,000 per year.
+
+**After modernizing through replatforming plus targeted refactoring (hypothetical):**
+
+- One-time cost: 1,200,000, including a contingency allowance
+- Run cost: 250,000 per year
+- Cost of change: 450,000 per year, reflecting faster, safer changes
+- Expected cost of risk: a 3 percent chance of the same incident, giving 30,000
+
+Total: 730,000 per year after modernization.
+
+**Result:** annual savings of 370,000. Payback on the one-time cost is roughly 3.2 years. Over five years, the cumulative difference is about 650,000 in favor of modernizing, before considering any revenue gained from faster change.
+
+That example would be a reasonable but not overwhelming case. Small changes in the assumptions could swing it either way, which is why sensitivity matters. Test what happens if the one-time cost runs 30 percent over, or if savings arrive a year later than planned. If the case only works under optimistic assumptions, consider a smaller scope.
+
+## The strangler fig approach
+
+Large modernization programs carry the most risk when they try to switch everything at once. The strangler fig pattern reduces that risk by replacing a system piece by piece.
+
+The approach works like this:
+
+1. Put a routing layer, such as an API gateway or proxy, in front of the legacy application.
+2. Choose one well-bounded capability to rebuild or move.
+3. Route traffic for that capability to the new implementation while the legacy system handles everything else.
+4. Validate in production, then move to the next capability.
+5. Retire the legacy system when nothing routes to it anymore.
+
+The benefits are significant. Value arrives earlier, each step can be reversed, and the team learns about the real system before tackling the hardest parts. The trade-off is a period of running two systems, which adds operational complexity and requires careful data synchronization.
+
+## Metrics to track
+
+Track a small set of measures from before the program starts so you can show progress honestly.
+
+- **Lead time for changes:** how long from code committed to running in production.
+- **Deployment frequency:** how often you can release safely.
+- **Change failure rate:** the share of releases that cause an incident or need a fix.
+- **Time to restore service:** how quickly you recover from incidents.
+- **Run cost:** monthly infrastructure, licensing, and support spend for the application.
+- **Incident count and severity** tied to the application.
+- **Business measures** relevant to the system, such as order processing time or customer-facing errors.
+
+Baseline these before you start. Report them at regular intervals throughout the program, not only at the end.
+
+## When not to modernize
+
+Some applications are better left alone, at least for now.
+
+- **Low change, stable, and supported.** If the system rarely needs changes, runs reliably, and remains supported, the business case is often weak.
+- **Scheduled for replacement.** If a broader platform decision will replace it within a short horizon, invest minimally.
+- **Unclear ownership.** If no one on the business side can define what the system should do, modernization will stall on requirements.
+- **Insufficient capacity.** If the team cannot absorb the program alongside current commitments, a delayed start may be better than a failed one.
+- **The real problem is elsewhere.** Sometimes slow delivery comes from process, approvals, or unclear priorities, not technology.
+
+<Callout title="Before you approve a modernization program">
+Confirm the specific problem it solves. Check that baseline metrics exist. Review the sensitivity of the business case. Ensure a business owner is accountable. Prefer an incremental plan with early, visible milestones.
+</Callout>
+
+## Making the decision
+
+Modernization makes financial sense when the cumulative cost of standing still clearly exceeds the cost of change, when the chosen option is the least disruptive one that solves the real problem, and when the plan delivers value in stages. A disciplined business case, honest assumptions, and baseline metrics make that decision much easier to defend.
+
+Domiutra helps teams assess application portfolios and plan incremental modernization. You can learn more about our approach on the [application modernization](/services/application-modernization) page.

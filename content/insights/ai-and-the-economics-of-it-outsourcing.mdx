@@ -1,0 +1,128 @@
+export const meta = {
+  title: "How AI is changing the economics of IT outsourcing",
+  excerpt: "AI coding tools change where engineering effort goes, not whether you need engineers. What that means for pricing, quality, security, and the questions buyers should ask.",
+  category: "AI",
+  publishedAt: "2026-09-22",
+  readingTime: "9 min read",
+  author: "Domiutra",
+}
+
+AI-assisted development is now a normal part of how many engineering teams work. Code completion, chat-based assistants, and agents that can propose multi-file changes are widely available. For buyers of outsourced engineering, this raises fair questions. If engineers can produce more code, should engagements cost less? Should you still pay by the hour? And what risks come with a vendor using these tools on your codebase?
+
+The honest answer is that AI changes the shape of engineering work more than its volume. Some tasks get faster. Others do not, and some new work appears, particularly in review, verification, and governance. This article looks at where the gains are real, where they are not, and what that means for how you buy.
+
+<KeyTakeaways items={[
+  "AI assistance helps most with well-patterned work: boilerplate, tests, migrations, documentation, and triage.",
+  "It helps least with ambiguous requirements, system design, cross-team coordination, and judgment calls.",
+  "More code per engineer is not the same as more outcomes. Review and verification effort rises with output.",
+  "The economic pressure is toward pricing on capacity and outcomes rather than pure hours.",
+  "Ask vendors specifically which tools they use, how client code and data are protected, and how AI-generated work is reviewed.",
+]} />
+
+## Where AI assistance genuinely helps
+
+The clearest gains come from tasks with strong patterns and easy verification. If an engineer can quickly confirm whether the output is correct, AI tends to save time.
+
+**Boilerplate and scaffolding.** Creating standard API endpoints, data models, configuration files, and form handling follows predictable patterns. Assistants generate a reasonable first draft quickly.
+
+**Test generation.** Drafting unit tests for existing functions, especially covering edge cases a developer might skip, is a strong use case. The tests still need review to confirm they test meaningful behavior rather than restating the implementation.
+
+**Mechanical migrations.** Upgrading framework versions, converting between syntax styles, or updating deprecated API calls across a codebase involves many similar edits. AI tools can handle much of the repetition, with engineers reviewing and fixing the exceptions.
+
+**Documentation.** Summarizing what a module does, drafting README files, and explaining unfamiliar legacy code all benefit. This is particularly useful in modernization work where original authors are long gone.
+
+**Triage and investigation.** Reading stack traces, searching logs, and proposing likely causes for an error can shorten the path to a diagnosis. The engineer still confirms the root cause.
+
+## Where it does not help much
+
+The hardest parts of software delivery are not typing speed problems.
+
+**Unclear requirements.** If the business has not decided what it wants, faster code generation produces the wrong thing faster.
+
+**System design and architecture.** Choosing boundaries, data ownership, consistency models, and failure handling depends on context that rarely exists in a prompt. AI can offer options. It cannot own the trade-off.
+
+**Coordination.** Aligning with other teams, negotiating interfaces, managing dependencies, and sequencing releases are human activities.
+
+**Novel or highly specific domain logic.** Business rules unique to your company, regulatory interpretations, and edge cases learned from production incidents are not in any training data.
+
+**Production judgment.** Deciding whether to roll back, how to communicate an incident, or whether a risk is acceptable requires accountability that a tool cannot carry.
+
+## Output is not outcome
+
+It is tempting to measure AI's impact by lines of code, pull requests, or tickets closed. These numbers can rise sharply while actual delivery improves modestly or not at all.
+
+The reasons are structural. More code means more to review, test, secure, and maintain. Generated code can be plausible but subtly wrong, and finding those errors takes careful reading. Larger volumes of change also increase the surface for defects and the cost of future maintenance.
+
+The measures that matter are still the ones tied to results: lead time from idea to production, change failure rate, time to restore service, defect escape, and whether the delivered features achieve their business purpose. If a vendor reports productivity gains from AI, ask which of these moved.
+
+<Callout title="A useful framing">
+AI shifts effort from writing code toward specifying, reviewing, and verifying it. Teams that invest in clear requirements, strong tests, and disciplined review benefit most. Teams without those foundations often see more output and similar or worse outcomes.
+</Callout>
+
+## The review and quality burden
+
+Review becomes more important, not less. A reviewer looking at AI-assisted code needs to check the same things as always, plus some new ones:
+
+- Does the code do what the requirement intended, not just what the prompt said?
+- Are there invented functions, outdated library calls, or incorrect assumptions about the codebase?
+- Do the tests verify real behavior, or were they generated to pass against the implementation?
+- Has the change introduced dependencies that need license and security review?
+- Is the code consistent with existing patterns, or has it introduced a parallel way of doing the same thing?
+
+Practical safeguards include keeping pull requests small, requiring meaningful test coverage for changed code, running static analysis and dependency scanning in the pipeline, and ensuring a named human is accountable for every merged change. None of this is new. AI simply makes skipping it more costly.
+
+## What this means for pricing models
+
+Pure time-and-materials pricing assumes hours are a reasonable proxy for value. If some tasks now take less time, that proxy weakens. Buyers may reasonably ask why they should pay the same hours for work that is partly automated. Vendors may reasonably point out that review, verification, and design effort have not shrunk.
+
+The likely direction is toward pricing models that focus on what is delivered rather than how long it took:
+
+| Model | How it works | Effect of AI efficiency |
+|---|---|---|
+| Time and materials | Pay per hour or day | Gains may reduce hours, but buyer bears all delivery risk |
+| Capacity-based | Pay for a team with agreed skills and throughput expectations | Gains show up as more delivered within the same capacity |
+| Milestone or fixed scope | Pay for defined deliverables | Vendor keeps efficiency gains, takes on delivery risk |
+| Managed service with SLAs | Pay for ongoing outcomes within a scope | Gains help vendor meet commitments more reliably |
+
+None of these is automatically better. Fixed-price work requires well-defined scope. Capacity models require trust and transparent reporting. The point is that buyers should evaluate what they receive for the money, not just the hourly rate.
+
+Be cautious of vendors that promise dramatic cost reductions from AI. Real gains vary widely by task, codebase, and team maturity. Ask for an explanation of where savings would come from and how they would be measured on your work.
+
+## Security and IP considerations
+
+AI tools introduce specific questions for any engagement involving your code and data. Review these with your security team and legal counsel.
+
+**Where does your code go?** Some tools send code to external services for processing. Understand which tools the vendor uses, whether they are enterprise versions with data protection terms, and whether your code may be retained or used for training.
+
+**What data is exposed?** Prompts may include code, logs, configuration, or customer data pasted for debugging. Define what may and may not be shared with AI tools, especially secrets and personal information.
+
+**Who owns the output?** Discuss with counsel how your contract's IP assignment language applies to AI-assisted work product, and whether any tool terms affect that.
+
+**Licensing of generated code.** Generated code may resemble existing open-source code. Some tools offer filters or reference tracking. Your dependency and license scanning should cover generated code as well.
+
+**Access by agents.** AI agents that can run commands, open pull requests, or access environments should follow the same least-privilege principles as human accounts. They should not hold production credentials by default.
+
+## Questions to ask vendors about AI use
+
+1. Which AI tools do your engineers use, and are they approved centrally or chosen individually?
+2. Are those tools configured so our code and data are not retained or used for model training?
+3. What is your policy on including secrets, personal data, or production data in prompts?
+4. Can we restrict or opt out of AI tool use on specific repositories?
+5. How is AI-assisted code reviewed before it is merged? Who is accountable?
+6. How do you check generated code for license and security issues?
+7. How do you measure whether AI use improves delivery outcomes, not just output?
+8. How, if at all, are efficiency gains reflected in pricing or delivered scope?
+9. Do any AI agents have access to our environments, and with what permissions?
+10. How would you notify us if an AI tool were involved in a security incident?
+
+A vendor with mature practices will answer these directly and in writing. Hesitation or generic answers suggest the policies are not yet in place.
+
+<Callout title="Put it in the contract">
+Ask counsel to consider adding AI-specific terms: approved tools, data restrictions, retention and training prohibitions, review requirements, and notification obligations. These are easier to agree before work starts.
+</Callout>
+
+## The bottom line for buyers
+
+AI makes skilled engineers more effective on certain tasks. It does not remove the need for engineering judgment, design, review, or accountability, and it adds governance work. The economic shift is real but gradual, and it favors buying outcomes and capacity with transparent reporting over buying hours alone.
+
+Domiutra uses AI tools within defined client-approved policies and keeps human engineers accountable for every change. If you want to discuss how that would work in your environment, see our [AI and data services](/services/ai-data).

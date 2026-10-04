@@ -1,0 +1,165 @@
+export const meta = {
+  title: "How to build a U.S.-managed global engineering team",
+  excerpt: "Roles, overlap hours, rituals, decision rights, quality gates, security, and metrics for running a distributed engineering team with clear U.S.-based accountability.",
+  category: "Leadership",
+  publishedAt: "2026-10-01",
+  readingTime: "9 min read",
+  author: "Domiutra",
+}
+
+Distributed engineering teams can deliver excellent work. They can also become a source of constant friction, where questions wait a day for answers, quality varies by person, and nobody is sure who decided what. The difference is rarely talent. It is structure.
+
+A U.S.-managed global team puts accountability, client communication, and key decisions close to the business, while engineering work happens across locations. This article describes the roles, rhythms, and controls that make that model work.
+
+<KeyTakeaways items={[
+  "Define roles by accountability, not just job title. Every important decision needs a named owner.",
+  "Design a predictable overlap window and make written handoffs the default outside it.",
+  "Documentation is infrastructure for distributed teams. Budget time for it.",
+  "Quality gates and security controls should be automated and identical for everyone, regardless of location.",
+  "Measure delivery with flow and stability metrics, and compare the team against its own baseline.",
+]} />
+
+## The roles that matter
+
+Titles vary between organizations. What matters is that each of these responsibilities has a clear owner.
+
+| Role | Primary accountability | Typical location consideration |
+|---|---|---|
+| Engagement lead | Overall relationship, commercial health, escalation, and alignment with business goals | Close to the client's business hours and decision-makers |
+| Solution architect | Technical direction, key design decisions, and architectural consistency | Needs strong overlap with client technical leaders |
+| Delivery manager | Planning, flow of work, risk management, and reporting | Bridges both time zones; owns the handoff process |
+| Tech leads | Code quality, technical guidance within the team, and review standards | Embedded with the engineers they lead |
+| Engineers | Building, testing, and maintaining software | Anywhere with adequate overlap |
+| QA engineers | Test strategy, automation, and release confidence | Embedded with delivery teams, not a separate phase |
+| DevOps or platform engineers | Pipelines, environments, infrastructure, and observability | Close coordination with tech leads and security |
+
+On the client side, a product owner is essential. Someone must set priorities, answer domain questions, and accept completed work. Without that role, a distributed team will make product decisions by default, and some of them will be wrong.
+
+Small teams combine roles. A delivery manager may also act as engagement lead, or a tech lead may cover architecture. That is fine as long as the responsibilities are explicit.
+
+## Overlap hours and handoffs
+
+Overlap is the most valuable and most limited resource in a distributed team. Spend it on the things that require conversation.
+
+**Set a fixed overlap window.** Choose a consistent block of a few hours each business day when the full team, including the client product owner, is reliably available. Protect it from unrelated meetings.
+
+**Use the window for:** standups, design discussions, unblocking, pairing on difficult problems, and quick decisions.
+
+**Use written handoffs for everything else.** Good handoffs include the current state of work, what is blocked and by whom, decisions needed, and links to relevant tickets or pull requests. A short end-of-day note in a shared channel is often enough.
+
+**Watch for asynchronous drift.** If questions regularly sit unanswered until the next overlap window, the cost is a lost day each time. Make sure decision-makers are present in the window, and that engineers have enough context to keep moving while they wait.
+
+## Rituals that keep a team aligned
+
+Keep rituals few, short, and consistent.
+
+- **Daily standup** in the overlap window, focused on blockers rather than status recitation.
+- **Backlog refinement** weekly, with the product owner, so work entering a sprint is understood.
+- **Sprint planning** with clear acceptance criteria for each item.
+- **Demo** of working software at the end of each sprint, to stakeholders who can give feedback.
+- **Retrospective** each sprint, with one or two concrete changes agreed and tracked.
+- **Architecture review** on a regular schedule, and on demand for significant decisions.
+- **Monthly delivery review** between the engagement lead and the client sponsor, covering metrics, risks, staffing, and upcoming priorities.
+
+Rotate meeting times occasionally if the overlap window falls at an inconvenient hour for one location. Fairness matters for retention.
+
+## Documentation as infrastructure
+
+In a co-located team, much knowledge moves through conversation. In a distributed team, undocumented knowledge effectively does not exist for half the people who need it.
+
+Treat these as required, maintained artifacts:
+
+- **Architecture overview:** system context, main components, data flows, and key dependencies.
+- **Decision records:** short notes on significant technical decisions, the options considered, and the reasoning.
+- **Runbooks:** how to deploy, roll back, respond to common alerts, and recover from known failures.
+- **Onboarding guide:** how to get access, set up a local environment, and make a first change.
+- **Working agreements:** definition of done, review expectations, branching strategy, and communication norms.
+
+Keep documentation close to the code where possible, and make updating it part of the definition of done. Outdated documentation is worse than none because it misleads.
+
+## Decision rights
+
+Unclear decision rights slow distributed teams more than anything else. Engineers wait for permission, or they make decisions that are later reversed.
+
+A simple approach is to classify decisions by scope:
+
+| Decision type | Example | Who decides |
+|---|---|---|
+| Local implementation | Internal structure of a module, naming, test approach | Engineer, within team standards |
+| Team-level technical | Library choices within a service, refactoring plans | Tech lead |
+| Cross-system or architectural | New services, data ownership, integration patterns | Solution architect, with client technical leadership |
+| Product and priority | What to build next, scope trade-offs | Client product owner |
+| Commercial and staffing | Team size, roles, engagement changes | Engagement lead and client sponsor |
+
+Publish this and refer to it when disagreements arise. Most conflicts in distributed teams turn out to be disagreements about who gets to decide, not about the decision itself.
+
+<Callout title="Default to written decisions">
+Any decision that affects more than one person should be written down where the team can find it, with the owner and the date. This takes minutes and saves days of confusion later.
+</Callout>
+
+## Quality gates
+
+Quality should not depend on which engineer did the work or where they sit. Automate the gates and apply them to everyone.
+
+- **Code review** required for every change, with at least one reviewer who knows the affected area.
+- **Automated tests** at unit and integration level, run on every pull request.
+- **Static analysis and linting** enforced in the pipeline.
+- **Dependency and security scanning** for known vulnerabilities and license issues.
+- **Definition of done** that includes tests, documentation updates, and product owner acceptance.
+- **Release checks** such as smoke tests, staged rollouts, or feature flags for higher-risk changes.
+
+Keep pull requests small. Large changes are hard to review across time zones, and they accumulate risk.
+
+## Security and access model
+
+A distributed team needs a security model that is consistent, auditable, and easy to follow.
+
+**Least privilege.** Each person gets access to what their role requires. Review access regularly and remove what is no longer needed.
+
+**Individual identity.** No shared accounts. Use single sign-on where available so access can be granted and revoked centrally.
+
+**Multi-factor authentication** on source control, cloud consoles, CI/CD systems, and collaboration tools.
+
+**Environment separation.** Development, test, staging, and production are separate, with production access limited to a small group and granted on a time-bound, logged basis where possible.
+
+**Secrets management.** Credentials live in a secrets manager, never in code, tickets, or chat.
+
+**Device standards.** Agree on expectations for managed or hardened devices, disk encryption, and screen locking.
+
+**Offboarding.** Revoke access promptly when someone leaves the team, and verify it with a checklist.
+
+## Onboarding new engineers
+
+Onboarding quality determines how quickly new team members contribute and how many mistakes they make along the way.
+
+1. Request access in advance so day one is not spent waiting.
+2. Assign a buddy within the same or adjacent time zone.
+3. Walk through the architecture overview and decision records.
+4. Have the engineer set up a local environment using the onboarding guide, and fix the guide wherever it is wrong.
+5. Assign a small, real first change that goes through the full pipeline to production.
+6. Review progress at the end of the first and second weeks.
+
+## Measuring delivery
+
+Measure the system, not individuals. Flow and stability metrics, often called DORA metrics after the research program that popularized them, are a sound starting point.
+
+- **Deployment frequency:** how often the team releases to production.
+- **Lead time for changes:** time from code committed to running in production.
+- **Change failure rate:** the share of deployments that cause a failure requiring remediation.
+- **Time to restore service:** how long it takes to recover from a production failure.
+
+Compare the team against its own baseline over time rather than against external benchmarks, which depend heavily on context. Pair these with a few product measures, such as whether shipped features meet their goals, and with qualitative signals from retrospectives.
+
+## Scaling up and down
+
+Teams need to grow and shrink with demand. Plan for both.
+
+**Scaling up.** Add people in small increments, ideally to existing teams with strong tech leads rather than by forming new teams from scratch. Expect a temporary dip in throughput while new members ramp up. Update documentation and onboarding materials before the new people arrive.
+
+**Scaling down.** Identify knowledge held by departing members and transfer it through documentation and pairing. Reduce scope explicitly so the remaining team is not quietly expected to do the same amount of work. Revoke access on schedule.
+
+In both directions, give notice early and communicate the reasoning to the team. Predictability builds trust.
+
+## Bringing it together
+
+A U.S.-managed global team works when accountability is clear, overlap is protected, knowledge is written down, and quality and security controls are the same for everyone. Domiutra structures its delivery around these principles. You can read more about how we organize teams on our [delivery model](/delivery-model) page.

@@ -1,0 +1,158 @@
+export const meta = {
+  title: "What U.S. companies should know before outsourcing software engineering",
+  excerpt: "A practical guide to scoping, structuring, contracting, and governing an outsourced engineering engagement so it delivers outcomes instead of surprises.",
+  category: "Outsourcing",
+  publishedAt: "2026-09-08",
+  readingTime: "9 min read",
+  author: "Domiutra",
+}
+
+Most outsourcing problems are decided before the first line of code is written. They come from unclear scope, a mismatched engagement model, vague accountability, or a contract that nobody read closely. The engineering itself is rarely the root cause.
+
+This guide is for technology leaders who are considering an outside partner for software engineering work. It covers what to keep in-house, how to structure the relationship, what to put in the contract, and how to tell within the first quarter whether the engagement is working.
+
+<KeyTakeaways items={[
+  "Decide what to outsource based on how close the work is to your differentiation and how well you can specify it, not on cost alone.",
+  "Pick the engagement model that matches who will own delivery outcomes, then write that ownership down.",
+  "Treat IP assignment, confidentiality, data handling, and access control as day-one requirements reviewed by counsel.",
+  "Design time-zone overlap deliberately. A few shared hours with clear handoffs beat a full day of half-attended meetings.",
+  "Use the first 90 days to prove the working model on real work before you scale the team.",
+]} />
+
+## Decide what to outsource and what to keep
+
+Start with a simple question for each workstream: if this went badly, how hard would it be for us to recover? Work that encodes your core product judgment, pricing logic, or customer relationships should usually stay close. Work that is well understood, can be specified, and benefits from specialist depth is a better candidate.
+
+A useful way to sort candidates is along two axes: how differentiating the work is, and how clearly it can be defined.
+
+| | Clearly defined | Loosely defined |
+|---|---|---|
+| **Differentiating** | Outsource with strong internal product ownership | Keep in-house or co-develop with a small embedded team |
+| **Not differentiating** | Strong candidate for a managed or project engagement | Clarify scope first, then decide |
+
+Common good candidates include modernization of legacy systems, test automation, cloud migration, platform and DevOps work, integrations, and well-scoped product features. Weaker candidates include early-stage product discovery where the problem is still unclear, unless your partner is explicitly engaged to help with that discovery.
+
+Keep product ownership in-house regardless. Someone on your side must own priorities, accept work, and make trade-off calls. That role cannot be delegated without losing control of the outcome.
+
+## Choose the engagement model deliberately
+
+The engagement model decides who manages the work and who is accountable when it slips. There are three broad options.
+
+- **Staff augmentation.** You add engineers to your team. You direct the work and own delivery. The vendor owns hiring, retention, and replacement.
+- **Dedicated or managed team.** The vendor provides a team with its own delivery leadership. You set priorities and accept outcomes. The vendor owns how the work gets done.
+- **Project or outcome-based delivery.** The vendor commits to a defined scope or result, often against milestones or service levels.
+
+None of these is better in general. Augmentation suits teams with strong engineering management and a capacity gap. Managed teams suit organizations that want delivery responsibility, not just people. Project delivery suits work with a clear finish line. For more on the trade-offs, see our overview of [engagement models](/engagement-models).
+
+## Make accountability explicit
+
+Ambiguous accountability is the most common source of friction. Write down, in plain language, who owns each of these:
+
+1. Backlog priorities and acceptance of completed work
+2. Technical architecture and design decisions
+3. Day-to-day task assignment and team management
+4. Code quality standards and review
+5. Release decisions and production support
+6. Staffing changes, including replacements and ramp-downs
+
+A short responsibility matrix, agreed at kickoff and revisited quarterly, prevents most "I thought you were handling that" moments. Name a single escalation contact on each side.
+
+## Get the contract terms right
+
+Contracts for engineering services usually include a master services agreement and one or more statements of work. The details matter, and they vary by state and by your industry. Involve your legal counsel early, not as a final signature step. The points below are topics to raise with counsel, not legal advice.
+
+**Intellectual property assignment.** Confirm that work product created for you is assigned to you, including code, documentation, and designs. Ask how the vendor handles pre-existing tools or libraries it brings, and what license you receive for those. Check that the vendor's agreements with its own staff and any subcontractors support the assignment it is promising you.
+
+**Confidentiality.** Define what counts as confidential, how long the obligation lasts, and how information is returned or destroyed when the engagement ends.
+
+**Data handling.** If the team will touch personal data, regulated data, or production systems, specify where data may be stored and processed, who may access it, and how incidents are reported. Your industry may impose additional requirements.
+
+**Subcontracting.** Decide whether the vendor may use subcontractors, and if so, whether you must approve them.
+
+**Termination and transition.** Include reasonable notice periods, an obligation to hand over code, documentation, and credentials, and a defined transition assistance period.
+
+<Callout title="Contract checklist for counsel">
+Ask counsel to review: IP assignment and pre-existing materials, confidentiality scope and duration, data location and processing restrictions, security and incident notification obligations, subcontractor approval, non-solicitation terms, limitation of liability, termination rights, and transition assistance.
+</Callout>
+
+## Design security and access from day one
+
+Security is easier to set up correctly at the start than to retrofit after a team is productive. Agree on an access model before anyone receives credentials.
+
+- **Least privilege.** Grant access to the repositories, environments, and tools each role needs, and nothing more.
+- **Individual accounts.** No shared logins. Every action should trace to a named person.
+- **Multi-factor authentication** on source control, cloud consoles, and collaboration tools.
+- **Environment separation.** Development and test work should not require production access. Production access, where needed, should be time-bound and logged.
+- **Offboarding.** Define how quickly access is revoked when someone leaves the engagement, and verify it happens.
+- **Device and network expectations.** Agree on requirements for managed devices, disk encryption, and secure connectivity.
+
+Ask the vendor to describe its own security practices in writing. If it claims specific certifications, ask for the current reports or certificates and check their scope.
+
+## Design time-zone overlap on purpose
+
+Distributed teams work well when overlap is designed, not assumed. Full-day overlap is rarely necessary and often expensive. What matters is a predictable window for live collaboration and clean handoffs outside it.
+
+A workable pattern is a fixed overlap window of a few hours each business day. Use it for standups, design discussions, unblocking, and reviews that need conversation. Outside that window, work should move through written handoffs: clear tickets, pull request descriptions, and short end-of-day notes on what is blocked.
+
+Watch for two failure modes. If your internal team is answering questions late at night, the handoffs are not working. If the vendor team is waiting a full day for answers, the overlap window is too small or decision-makers are missing from it.
+
+## Set a communication cadence
+
+A simple, consistent cadence beats an elaborate one. A reasonable starting point:
+
+| Cadence | Purpose | Who attends |
+|---|---|---|
+| Daily | Standup and blocker review | Delivery team and product owner |
+| Weekly | Progress, risks, upcoming priorities | Delivery lead, product owner, tech lead |
+| Every sprint or two | Demo of working software and retrospective | Team and stakeholders |
+| Monthly | Delivery health, staffing, commercial review | Engagement lead and your sponsor |
+| Quarterly | Strategic review, roadmap alignment, model adjustments | Executives on both sides |
+
+The demo is the most important ritual on the list. Working software shown regularly is the clearest signal of real progress.
+
+## How to evaluate a vendor
+
+Sales conversations tend to emphasize capability. Your questions should test how the vendor behaves when things go wrong.
+
+1. Who will be our day-to-day point of accountability, and where are they based?
+2. Who are the actual engineers, and can we interview them before they start?
+3. How do you handle underperformance or a poor fit on the team?
+4. What is your process for replacing someone who leaves, and how is knowledge transferred?
+5. How do you run code review, testing, and release in a typical engagement?
+6. What do you report to clients, and how often? Can we see an example with sensitive details removed?
+7. How do you handle access control, offboarding, and security incidents?
+8. What happens to our code, documentation, and credentials if we end the engagement?
+9. What is your policy on using AI coding tools with client code?
+10. Describe an engagement that went badly. What did you change afterward?
+
+Pay attention to specificity. Vague answers about "best practices" or "world-class talent" are a signal to probe further.
+
+## A practical first 90 days
+
+The first quarter should prove the working model on real work before you scale up.
+
+**Days 1 to 30: Foundation.** Complete access setup and security onboarding. Agree on the responsibility matrix and communication cadence. Run a structured knowledge transfer on architecture, codebase, and domain. Ship at least one small, real change to production through the normal process.
+
+**Days 31 to 60: Rhythm.** Run full sprints with demos. Establish baseline delivery measures such as lead time for changes, deployment frequency, and defect escape. Identify gaps in documentation or test coverage that slow the team down.
+
+**Days 61 to 90: Review.** Hold a structured review against goals set at kickoff. Decide whether to scale, adjust, or change course. Update the responsibility matrix based on what you have learned.
+
+<Callout title="Define success before you start">
+Write down three to five specific outcomes you expect by day 90, such as a working deployment pipeline, a defined feature shipped, or a measured improvement in test coverage. Review them together at the end of the quarter.
+</Callout>
+
+## Warning signs to act on early
+
+- Demos are postponed or show slides instead of working software.
+- The people doing the work are different from the people you interviewed, without notice.
+- Status reports are green while your internal team reports frustration.
+- Questions take days to answer, or answers come only from the account manager.
+- Pull requests are large, infrequent, and hard to review.
+- Access requests keep expanding without a clear reason.
+- Team turnover is high and knowledge leaves with each departure.
+
+Any one of these can happen occasionally. A pattern means the engagement needs a direct conversation, and possibly a change in model or partner.
+
+## Closing thought
+
+Outsourcing works when both sides are clear about who owns what, the contract protects your interests, and progress is visible in working software. Domiutra structures engagements around that principle, with U.S.-based engagement leadership accountable for delivery. If you are weighing options, you can [start a conversation](/contact) about your situation.
