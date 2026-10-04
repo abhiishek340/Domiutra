@@ -4,6 +4,7 @@ import { TrustStrip } from "@/components/sections/home/TrustStrip";
 import { ServicesSection } from "@/components/sections/home/ServicesSection";
 import { WorkflowSection } from "@/components/sections/home/WorkflowSection";
 import { WhySection } from "@/components/sections/home/WhySection";
+import { BriefSection } from "@/components/sections/home/BriefSection";
 import { IndustriesSection } from "@/components/sections/home/IndustriesSection";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { buildMetadata } from "@/lib/seo/metadata";
@@ -23,6 +24,7 @@ export default function HomePage() {
       <TrustStrip />
       <ServicesSection />
       <WorkflowSection />
+      <BriefSection />
       <WhySection />
       <IndustriesSection />
       <FinalCTA title="Let’s build what’s next." body="Tell us what you’re working on." />

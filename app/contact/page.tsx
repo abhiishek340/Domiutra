@@ -5,6 +5,9 @@ import { site } from "@/lib/site";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { SplitTextReveal } from "@/components/animations/SplitTextReveal";
+import { isBriefEnabled } from "@/lib/brief/config";
+import { BotOrb } from "@/components/brief/BotOrb";
+import Link from "next/link";
 
 export const metadata: Metadata = buildMetadata({
   title: "Contact Domiutra",
@@ -37,6 +40,20 @@ export default function ContactPage() {
             <p className="animate-rise mt-6 max-w-md text-lead text-fg-muted" style={{ animationDelay: "0.1s" }}>
               Tell us what you’re trying to build, modernize, automate, or operate.
             </p>
+
+            {isBriefEnabled() && (
+              <Link
+                href="/brief"
+                className="animate-fade group mt-8 flex items-center gap-3 rounded-md border border-line-strong bg-ink-900/60 p-4 transition-colors hover:border-mint/50"
+                style={{ animationDelay: "0.25s" }}
+              >
+                <BotOrb size={32} />
+                <span>
+                  <span className="block text-sm font-medium text-fg">Not sure how to describe it?</span>
+                  <span className="block text-sm text-fg-muted group-hover:text-fg">Draft a project brief with our AI assistant →</span>
+                </span>
+              </Link>
+            )}
 
             <div className="animate-fade mt-14" style={{ animationDelay: "0.15s" }}>
               <h2 className="label-mono text-fg-subtle">What happens next</h2>

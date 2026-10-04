@@ -32,7 +32,7 @@ type CommonProps = {
 function Inner({ children, arrow }: { children: ReactNode; arrow?: boolean }) {
   return (
     <>
-      <span>{children}</span>
+      <span className="inline-flex items-center gap-2">{children}</span>
       {arrow && (
         <ArrowRight
           aria-hidden="true"

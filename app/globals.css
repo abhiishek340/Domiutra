@@ -129,6 +129,17 @@
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
   50% { transform: translate3d(6vw, 4vh, 0) scale(1.15); }
 }
+@keyframes orb-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes orb-halo {
+  0%, 100% { transform: scale(1); opacity: 0.35; }
+  50% { transform: scale(1.45); opacity: 0; }
+}
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
 @keyframes marquee {
   to { transform: translateX(-50%); }
 }
@@ -260,6 +271,29 @@
 /* Hero aurora glows */
 .aurora { animation: aurora-drift 14s ease-in-out infinite; will-change: transform; }
 .aurora-b { animation-duration: 18s; animation-direction: reverse; }
+
+/* Brief assistant orb */
+.bot-orb-core {
+  background: conic-gradient(from 0deg, var(--color-mint), var(--color-sky), #b49cff, var(--color-mint));
+  filter: blur(6px) saturate(1.2);
+  animation: orb-spin 6s linear infinite;
+}
+.bot-orb-halo {
+  background: radial-gradient(closest-side, rgb(122 240 195 / 0.55), transparent);
+  opacity: 0;
+}
+.bot-orb.is-thinking .bot-orb-core { animation-duration: 1.4s; }
+.bot-orb.is-thinking .bot-orb-halo { animation: orb-halo 1.4s ease-out infinite; }
+
+/* Loading text shimmer */
+.text-shimmer {
+  background: linear-gradient(90deg, var(--color-fg-subtle) 0%, var(--color-fg) 45%, var(--color-mint) 55%, var(--color-fg-subtle) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 2.2s linear infinite;
+}
 
 /* Infinite ticker; pauses on hover */
 .marquee {

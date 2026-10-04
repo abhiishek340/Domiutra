@@ -4,6 +4,7 @@ import { industries } from "@/lib/data/industries";
 import { caseStudies } from "@/lib/data/case-studies";
 import { getAllArticles } from "@/lib/content/articles";
 import { absoluteUrl } from "@/lib/site";
+import { isBriefEnabled } from "@/lib/brief/config";
 
 type Entry = MetadataRoute.Sitemap[number];
 
@@ -34,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/about", 0.6),
     page("/careers", 0.5, "weekly"),
     page("/contact", 0.8),
+    ...(isBriefEnabled() ? [page("/brief", 0.7)] : []),
     page("/privacy", 0.2, "yearly"),
     page("/terms", 0.2, "yearly"),
     page("/accessibility", 0.2, "yearly"),
