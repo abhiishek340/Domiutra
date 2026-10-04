@@ -39,6 +39,8 @@ cp .env.example .env.local
 
 Before the first E2E run: `npx playwright install chromium`.
 
+E2E tests build into a separate `.next-test` folder, so they never disturb a running `npm run dev` or `npm start`. To do the same for a manual build, set `NEXT_DIST_DIR=.next-test`.
+
 ## Project structure
 
 ```text

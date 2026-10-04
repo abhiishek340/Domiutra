@@ -25,10 +25,18 @@ export default defineConfig({
   webServer: {
     command: `npm run build && npx next start -p ${PORT}`,
     url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    // Always start a fresh server so tests run against the current code.
+    reuseExistingServer: false,
     timeout: 240_000,
     // A placeholder Gemini key enables the brief assistant UI; E2E tests
     // intercept /api/brief in the browser, so Google is never called.
-    env: { RESEND_API_KEY: "", CONTACT_EMAIL: "", NEXT_PUBLIC_SITE_URL: baseURL, GEMINI_API_KEY: "e2e-placeholder-not-a-real-key" },
+    env: {
+      // Build into a separate folder so E2E runs never disturb a running dev/prod server.
+      NEXT_DIST_DIR: ".next-test",
+      RESEND_API_KEY: "",
+      CONTACT_EMAIL: "",
+      NEXT_PUBLIC_SITE_URL: baseURL,
+      GEMINI_API_KEY: "e2e-placeholder-not-a-real-key",
+    },
   },
 });

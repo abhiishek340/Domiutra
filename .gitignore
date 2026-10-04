@@ -49,3 +49,6 @@ next-env.d.ts
 
 # coverage
 /coverage
+
+# isolated test builds
+/.next-test/

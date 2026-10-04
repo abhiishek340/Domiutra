@@ -19,6 +19,9 @@ const nextConfig: NextConfig = {
   // Lets `next dev` be opened from other devices on the local network
   // (e.g. http://10.0.0.x:3000). Dev-only; has no effect on production.
   allowedDevOrigins: ["10.*.*.*", "192.168.*.*", "172.*.*.*", "*.local"],
+  // Test builds use a separate folder (NEXT_DIST_DIR=.next-test) so they can
+  // never overwrite the build a running `npm start` server is serving.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   pageExtensions: ["ts", "tsx", "mdx"],
   poweredByHeader: false,
   reactStrictMode: true,
