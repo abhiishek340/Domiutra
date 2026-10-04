@@ -4,7 +4,7 @@ import { services } from "@/lib/data/services";
 import { briefJsonSchema, briefRequestSchema, briefSchema, SERVICE_SLUGS, type Brief } from "@/lib/brief/schema";
 import { buildSystemInstruction, buildUserContent } from "@/lib/brief/prompt";
 import { briefToText, ENGAGEMENT_LABELS } from "@/lib/brief/format";
-import { DEFAULT_MODEL, geminiModel, isBriefEnabled, isDemoMode } from "@/lib/brief/config";
+import { DEFAULT_FALLBACK_MODEL, DEFAULT_MODEL, geminiModel, geminiModels, isBriefEnabled, isDemoMode } from "@/lib/brief/config";
 
 const generateContent = vi.fn();
 vi.mock("@google/genai", () => ({
@@ -14,7 +14,7 @@ vi.mock("@google/genai", () => ({
   },
 }));
 
-const { generateBrief, demoBrief } = await import("@/lib/brief/generate");
+const { generateBrief, demoBrief, isTransient } = await import("@/lib/brief/generate");
 
 export const sampleBrief: Brief = {
   relevant: true,
@@ -134,11 +134,14 @@ describe("config", () => {
     expect(isBriefEnabled()).toBe(false);
   });
 
-  it("uses a configurable model with a Flash default", () => {
+  it("uses a configurable primary model with a distinct fallback", () => {
     vi.stubEnv("GEMINI_MODEL", "");
+    vi.stubEnv("GEMINI_FALLBACK_MODEL", "");
     expect(geminiModel()).toBe(DEFAULT_MODEL);
-    vi.stubEnv("GEMINI_MODEL", "gemini-3.5-flash-lite");
-    expect(geminiModel()).toBe("gemini-3.5-flash-lite");
+    expect(geminiModels()).toEqual([DEFAULT_MODEL, DEFAULT_FALLBACK_MODEL]);
+    vi.stubEnv("GEMINI_MODEL", "custom-model");
+    vi.stubEnv("GEMINI_FALLBACK_MODEL", "custom-model");
+    expect(geminiModels()).toEqual(["custom-model"]); // no pointless duplicate attempt
   });
 });
 
@@ -187,6 +190,37 @@ describe("generateBrief", () => {
   it("reports off-topic input instead of inventing a brief", async () => {
     generateContent.mockResolvedValue({ text: JSON.stringify({ ...sampleBrief, relevant: false }) });
     await expect(generateBrief("Tell me a joke about penguins please.")).resolves.toEqual({ ok: false, code: "off_topic" });
+  });
+
+  it("recognizes transient provider errors", () => {
+    expect(isTransient(new Error('{"error":{"code":503,"status":"UNAVAILABLE"}}'))).toBe(true);
+    expect(isTransient(new Error("This model is currently experiencing high demand"))).toBe(true);
+    expect(isTransient(Object.assign(new Error("x"), { status: 429 }))).toBe(true);
+    expect(isTransient(new Error("RESOURCE_EXHAUSTED"))).toBe(true);
+    expect(isTransient(new Error('{"error":{"code":400,"status":"INVALID_ARGUMENT"}}'))).toBe(false);
+    expect(isTransient(new Error("API key not valid"))).toBe(false);
+  });
+
+  it("falls back to the second model when the first is overloaded", async () => {
+    vi.stubEnv("GEMINI_FALLBACK_MODEL", "");
+    generateContent
+      .mockRejectedValueOnce(new Error('{"error":{"code":503,"message":"high demand","status":"UNAVAILABLE"}}'))
+      .mockResolvedValueOnce({ text: JSON.stringify(sampleBrief) });
+    const result = await generateBrief("Modernize our billing platform please.");
+    expect(result.ok).toBe(true);
+    expect(generateContent.mock.calls.map((c) => c[0].model)).toEqual([DEFAULT_MODEL, DEFAULT_FALLBACK_MODEL]);
+  });
+
+  it("fails fast on permanent errors such as a bad key, without trying the fallback", async () => {
+    generateContent.mockRejectedValue(new Error('{"error":{"code":400,"message":"API key not valid","status":"INVALID_ARGUMENT"}}'));
+    await expect(generateBrief("Modernize our billing platform please.")).resolves.toEqual({ ok: false, code: "upstream_error" });
+    expect(generateContent).toHaveBeenCalledTimes(1);
+  });
+
+  it("reports an error when every model is overloaded", async () => {
+    generateContent.mockRejectedValue(new Error("503 UNAVAILABLE"));
+    await expect(generateBrief("Modernize our billing platform please.")).resolves.toEqual({ ok: false, code: "upstream_error" });
+    expect(generateContent).toHaveBeenCalledTimes(2);
   });
 
   it("maps provider failures and timeouts", async () => {

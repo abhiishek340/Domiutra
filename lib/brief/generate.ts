@@ -1,22 +1,36 @@
 import { briefJsonSchema, briefSchema, type Brief } from "./schema";
 import { buildSystemInstruction, buildUserContent } from "./prompt";
-import { geminiApiKey, geminiModel, isDemoMode } from "./config";
+import { geminiApiKey, geminiModels, isDemoMode } from "./config";
 
 export type BriefResult =
   | { ok: true; brief: Brief; demo: boolean }
   | { ok: false; code: "not_configured" | "off_topic" | "upstream_error" | "timeout" };
 
 const TIMEOUT_MS = 25_000;
-const ATTEMPTS = 2;
+const OUTPUT_ATTEMPTS = 2; // per model, for malformed output
+const BACKOFF_MS = 600;
 
-type GenerateFn = (prompt: string, signal: AbortSignal) => Promise<string | undefined>;
+type GenerateFn = (prompt: string, signal: AbortSignal, model: string) => Promise<string | undefined>;
+
+/** Overload, rate-limit, and server errors are worth retrying on another model. */
+export function isTransient(error: unknown): boolean {
+  const text = error instanceof Error ? error.message : String(error);
+  const status = (error as { status?: number })?.status;
+  return [429, 500, 503].includes(status ?? 0) || /\b(429|500|503)\b|UNAVAILABLE|RESOURCE_EXHAUSTED|overloaded|high demand/i.test(text);
+}
+
+const sleep = (ms: number, signal: AbortSignal) =>
+  new Promise<void>((resolve) => {
+    const t = setTimeout(resolve, ms);
+    signal.addEventListener("abort", () => (clearTimeout(t), resolve()), { once: true });
+  });
 
 /** Calls Gemini with structured JSON output. The SDK is loaded lazily, server-side only. */
-const callGemini: GenerateFn = async (prompt, signal) => {
+const callGemini: GenerateFn = async (prompt, signal, model) => {
   const { GoogleGenAI } = await import("@google/genai");
   const ai = new GoogleGenAI({ apiKey: geminiApiKey() });
   const response = await ai.models.generateContent({
-    model: geminiModel(),
+    model,
     contents: buildUserContent(prompt),
     config: {
       systemInstruction: buildSystemInstruction(),
@@ -40,22 +54,32 @@ export async function generateBrief(prompt: string, generate: GenerateFn = callG
   }
 
   const signal = AbortSignal.timeout(TIMEOUT_MS);
-  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
-    let text: string | undefined;
-    try {
-      text = await generate(prompt, signal);
-    } catch (error) {
-      if (signal.aborted) return { ok: false, code: "timeout" };
-      console.error("[brief] Gemini request failed:", error instanceof Error ? error.message : error);
-      return { ok: false, code: "upstream_error" };
-    }
+  const models = geminiModels();
 
-    const parsed = safeJson(text);
-    const result = briefSchema.safeParse(parsed);
-    if (result.success) {
-      return result.data.relevant ? { ok: true, brief: result.data, demo: false } : { ok: false, code: "off_topic" };
+  for (const [index, model] of models.entries()) {
+    for (let attempt = 1; attempt <= OUTPUT_ATTEMPTS; attempt++) {
+      let text: string | undefined;
+      try {
+        text = await generate(prompt, signal, model);
+      } catch (error) {
+        if (signal.aborted) return { ok: false, code: "timeout" };
+        const message = error instanceof Error ? error.message : String(error);
+        if (isTransient(error) && index < models.length - 1) {
+          console.warn(`[brief] ${model} unavailable, falling back to ${models[index + 1]}:`, message.slice(0, 160));
+          await sleep(BACKOFF_MS, signal);
+          break; // next model
+        }
+        console.error(`[brief] ${model} request failed:`, message.slice(0, 300));
+        return { ok: false, code: "upstream_error" };
+      }
+
+      const parsed = safeJson(text);
+      const result = briefSchema.safeParse(parsed);
+      if (result.success) {
+        return result.data.relevant ? { ok: true, brief: result.data, demo: false } : { ok: false, code: "off_topic" };
+      }
+      console.warn(`[brief] Invalid output from ${model} (attempt ${attempt}):`, result.error.issues[0]?.message);
     }
-    console.warn(`[brief] Invalid model output (attempt ${attempt}):`, result.error.issues[0]?.message);
   }
   return { ok: false, code: "upstream_error" };
 }
