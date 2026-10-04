@@ -122,8 +122,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
 
             <p className="label-mono mt-12 text-fg-subtle">Technologies we often use</p>
             <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Example technologies">
-              {service.technologies
-                .flatMap((g) => g.items)
+              {[...new Set(service.technologies.flatMap((g) => g.items))]
                 .slice(0, 14)
                 .map((t) => (
                   <li key={t} className="rounded-xs border border-line-strong px-2 py-0.5 text-sm text-fg-muted">

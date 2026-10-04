@@ -81,7 +81,7 @@ export default async function ArticlePage({ params }: PageProps<"/insights/[slug
 
         <div className="surface-light py-16 md:py-24">
           <div className="container-site grid lg:grid-cols-12">
-            <div className="prose-domiutra lg:col-span-7 lg:col-start-3">
+            <div className="prose-domiutra min-w-0 lg:col-span-7 lg:col-start-3">
               <Content />
             </div>
           </div>
