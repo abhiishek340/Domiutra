@@ -1,0 +1,337 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Domiutra design tokens
+   Two-accent system: mint (primary signal) + cool blue (secondary).
+   Dark "ink" surfaces carry the narrative; light "paper" surfaces
+   carry dense reading content.
+------------------------------------------------------------------- */
+@theme {
+  /* Color — surfaces */
+  --color-ink-950: #080b10;
+  --color-ink-900: #0c1016;
+  --color-ink-850: #10151c;
+  --color-ink-800: #151b24;
+  --color-ink-700: #1e2631;
+  --color-ink-600: #2a3441;
+  --color-paper: #f5f7f6;
+  --color-paper-2: #eceeed;
+  --color-paper-3: #e0e4e2;
+
+  /* Color — text */
+  --color-fg: #f4f7f6;
+  --color-fg-muted: #a9b3b8;
+  --color-fg-subtle: #7d878e;
+  --color-ink-text: #101417;
+  --color-ink-text-muted: #4a5258;
+
+  /* Color — accents */
+  --color-mint: #7af0c3;
+  --color-mint-soft: #b9f7df;
+  --color-mint-deep: #0b6e4d; /* mint for text on light surfaces (AA) */
+  --color-sky: #8db4ff;
+  --color-sky-deep: #2c5bc4;
+
+  /* Color — lines */
+  --color-line: rgb(255 255 255 / 0.09);
+  --color-line-strong: rgb(255 255 255 / 0.18);
+  --color-line-dark: rgb(16 20 23 / 0.1);
+  --color-line-dark-strong: rgb(16 20 23 / 0.22);
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1rem;
+  --text-label--letter-spacing: 0.08em;
+
+  --text-display: clamp(2.75rem, 1.5rem + 4.2vw, 5.75rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.045em;
+
+  --text-h1: clamp(2.125rem, 1.45rem + 2.7vw, 3.875rem);
+  --text-h1--line-height: 1.02;
+  --text-h1--letter-spacing: -0.04em;
+
+  --text-h2: clamp(1.75rem, 1.3rem + 1.8vw, 2.75rem);
+  --text-h2--line-height: 1.08;
+  --text-h2--letter-spacing: -0.035em;
+
+  --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.02em;
+
+  --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.3125rem);
+  --text-lead--line-height: 1.55;
+
+  /* Radius — deliberately tight */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  /* Shadows — used sparingly */
+  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 20px 40px -24px rgb(0 0 0 / 0.6);
+  --shadow-float: 0 30px 80px -30px rgb(0 0 0 / 0.75);
+
+  /* Containers */
+  --container-site: 84rem; /* 1344px */
+  --container-prose: 42rem;
+
+  /* Motion */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 160ms;
+  --duration-base: 240ms;
+  --duration-slow: 600ms;
+
+  --animate-signal: signal 6s linear infinite;
+  --animate-pulse-soft: pulse-soft 3.2s ease-in-out infinite;
+  --animate-dash: dash 1.6s linear infinite;
+}
+
+@keyframes signal {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(0.35em); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes stage {
+  0% { opacity: 0; }
+  4%, 16% { opacity: 1; }
+  22%, 100% { opacity: 0; }
+}
+@keyframes layer-drop {
+  0% { transform: translate(-50%, -4px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(-50%, 40px); opacity: 0; }
+}
+@keyframes loading-bar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+@keyframes dash {
+  to { stroke-dashoffset: -24; }
+}
+
+/* ------------------------------------------------------------------
+   Base
+------------------------------------------------------------------- */
+@layer base {
+  /* Tailwind v4 defaults borders to currentColor; default to a hairline instead. */
+  *, ::before, ::after, ::backdrop {
+    border-color: var(--color-line);
+  }
+  .surface-light *, .surface-light ::before, .surface-light ::after {
+    border-color: var(--color-line-dark);
+  }
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+  }
+  body {
+    background: var(--color-ink-950);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-mint);
+    color: var(--color-ink-950);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-mint);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .surface-light :focus-visible {
+    outline-color: var(--color-mint-deep);
+  }
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Utilities
+------------------------------------------------------------------- */
+@utility container-site {
+  width: 100%;
+  max-width: var(--container-site);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) { padding-inline: 2rem; }
+  @media (width >= 80rem) { padding-inline: 3rem; }
+}
+
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+}
+
+/* Hairline technical grid used as a section backdrop */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+@utility bg-grid-dark {
+  background-image:
+    linear-gradient(to right, var(--color-line-dark) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-line-dark) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+@utility bg-dots {
+  background-image: radial-gradient(var(--color-line-strong) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+@utility mask-fade-b {
+  mask-image: linear-gradient(to bottom, black 55%, transparent);
+}
+@utility mask-radial {
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+/* Light surface: dark text, deep accents. Sections opt in with this class. */
+.surface-light {
+  background: var(--color-paper);
+  color: var(--color-ink-text);
+  color-scheme: light;
+}
+
+/* Pre-hydration entrance animations (hero) — CSS so LCP isn't delayed by JS */
+.animate-rise {
+  animation: rise 0.55s var(--ease-out-quint) both;
+}
+.animate-fade {
+  animation: fade-in 0.6s var(--ease-out-quint) both;
+}
+
+/* Hero pipeline stages light up in sequence */
+.hs-stage {
+  opacity: 0;
+  animation: stage 5.5s linear infinite both;
+}
+
+/* Signals travelling along SVG/CSS paths */
+.signal {
+  offset-rotate: 0deg;
+  animation: var(--animate-signal);
+}
+.is-paused .signal,
+.is-paused [data-loop] {
+  animation-play-state: paused;
+}
+
+/* Prose (MDX articles + legal) */
+.prose-domiutra {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--color-ink-text-muted);
+}
+.prose-domiutra > * + * { margin-top: 1.25em; }
+.prose-domiutra h2 {
+  margin-top: 2.4em;
+  font-size: 1.625rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--color-ink-text);
+}
+.prose-domiutra h3 {
+  margin-top: 1.9em;
+  font-size: 1.1875rem;
+  font-weight: 600;
+  color: var(--color-ink-text);
+}
+.prose-domiutra strong { color: var(--color-ink-text); font-weight: 600; }
+.prose-domiutra a {
+  color: var(--color-mint-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose-domiutra a:hover { text-decoration-thickness: 2px; }
+.prose-domiutra ul, .prose-domiutra ol { padding-left: 1.25em; }
+.prose-domiutra ul { list-style: none; }
+.prose-domiutra ul > li { position: relative; }
+.prose-domiutra ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.1em;
+  top: 0.78em;
+  width: 0.45em;
+  height: 1px;
+  background: var(--color-mint-deep);
+}
+.prose-domiutra ol { list-style: decimal; }
+.prose-domiutra ol > li::marker { font-family: var(--font-mono); font-size: 0.85em; color: var(--color-mint-deep); }
+.prose-domiutra li + li { margin-top: 0.45em; }
+.prose-domiutra blockquote {
+  border-left: 2px solid var(--color-mint-deep);
+  padding-left: 1.25em;
+  color: var(--color-ink-text);
+  font-size: 1.125rem;
+}
+.prose-domiutra hr { border-color: var(--color-line-dark); margin-block: 2.5em; }
+.prose-domiutra table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.prose-domiutra .table-wrap { overflow-x: auto; }
+.prose-domiutra th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-ink-text);
+  border-bottom: 1px solid var(--color-line-dark-strong);
+  padding: 0.6em 0.75em 0.6em 0;
+}
+.prose-domiutra td {
+  border-bottom: 1px solid var(--color-line-dark);
+  padding: 0.75em 0.75em 0.75em 0;
+  vertical-align: top;
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion: stop decorative loops, keep content static.
+   Motion for React is configured with reducedMotion="user" separately.
+------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .signal, .hs-signal { display: none; }
+  /* Reveal content is never hidden or mid-fade for reduced-motion users. */
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+  [data-loop] { animation: none !important; }
+}
