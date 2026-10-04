@@ -107,11 +107,6 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
-@keyframes stage {
-  0% { opacity: 0; }
-  4%, 16% { opacity: 1; }
-  22%, 100% { opacity: 0; }
-}
 @keyframes layer-drop {
   0% { transform: translate(-50%, -4px); opacity: 0; }
   20% { opacity: 1; }
@@ -120,6 +115,22 @@
 @keyframes loading-bar {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(400%); }
+}
+@keyframes letter-in {
+  0% { opacity: 0; transform: translateY(0.55em) rotateX(-95deg) scale(0.85); filter: blur(10px); }
+  55% { filter: blur(0); }
+  100% { opacity: 1; transform: none; filter: none; }
+}
+@keyframes accent-wave {
+  0%, 100% { color: var(--color-mint); text-shadow: 0 0 0 transparent; }
+  50% { color: var(--color-sky); text-shadow: 0 0 32px rgb(141 180 255 / 0.45); }
+}
+@keyframes aurora-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6vw, 4vh, 0) scale(1.15); }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
 }
 @keyframes dash {
   to { stroke-dashoffset: -24; }
@@ -228,11 +239,33 @@
   animation: fade-in 0.6s var(--ease-out-quint) both;
 }
 
-/* Hero pipeline stages light up in sequence */
-.hs-stage {
-  opacity: 0;
-  animation: stage 5.5s linear infinite both;
+/* Kinetic hero title */
+.hero-title {
+  font-size: clamp(3.25rem, 1rem + 8.5vw, 9rem);
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+  transform-style: preserve-3d;
 }
+.hero-letter {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+  animation: letter-in 0.9s var(--ease-out-quint) both;
+}
+.hero-letter-accent {
+  color: var(--color-mint);
+  animation: letter-in 0.9s var(--ease-out-quint) both, accent-wave 3.2s ease-in-out infinite;
+}
+
+/* Hero aurora glows */
+.aurora { animation: aurora-drift 14s ease-in-out infinite; will-change: transform; }
+.aurora-b { animation-duration: 18s; animation-direction: reverse; }
+
+/* Infinite ticker; pauses on hover */
+.marquee {
+  animation: marquee 32s linear infinite;
+}
+.marquee:hover { animation-play-state: paused; }
 
 /* Signals travelling along SVG/CSS paths */
 .signal {
@@ -330,7 +363,8 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .signal, .hs-signal { display: none; }
+  .signal { display: none; }
+  .hero-letter, .hero-letter-accent { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
   /* Reveal content is never hidden or mid-fade for reduced-motion users. */
   [data-reveal] { opacity: 1 !important; transform: none !important; }
   [data-loop] { animation: none !important; }

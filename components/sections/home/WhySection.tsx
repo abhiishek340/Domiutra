@@ -17,10 +17,8 @@ export function WhySection() {
         <SectionHeading
           id="why-title"
           tone="light"
-          align="split"
           eyebrow="Why Domiutra"
-          title="Accountable delivery, not just added headcount."
-          intro="Capacity is easy to buy. Ownership of the outcome is harder. Our model is built around the second."
+          title="Accountable by design."
         />
         <RevealGroup as="ul" className="mt-12 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
           {reasons.map((r, i) => (

@@ -49,8 +49,10 @@ test("contact form errors are announced and associated", async ({ page }) => {
 
 test("reduced motion stops decorative loops", async ({ page }) => {
   await page.goto("/");
-  // Hidden by CSS before hydration…
-  await expect(page.locator(".hs-signal").first()).toBeHidden();
-  // …and removed from the DOM once React knows the preference.
-  await expect(page.locator("svg animateMotion")).toHaveCount(0);
+  // Title letters render statically, with no entrance or color-wave animation.
+  const animation = await page.locator(".hero-letter").first().evaluate((el) => getComputedStyle(el).animationName);
+  expect(animation).toBe("none");
+  // The ticker stops scrolling.
+  const ticker = await page.locator(".marquee").evaluate((el) => getComputedStyle(el).animationName);
+  expect(ticker).toBe("none");
 });

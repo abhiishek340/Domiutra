@@ -11,10 +11,8 @@ export function IndustriesSection() {
       <div className="container-site">
         <SectionHeading
           id="industries-title"
-          align="split"
           eyebrow="Industries"
-          title="Built for industries that can’t stop running."
-          intro="Long-lived systems, sensitive data, and operations that can’t pause for a rewrite."
+          title="Built for critical systems."
         />
         <RevealGroup as="ul" className="mt-12 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
           {industries.map((industry) => (

@@ -1,14 +1,21 @@
+import { cn } from "@/lib/utils/cn";
+
 const principles = ["U.S.-managed", "Global delivery", "Security-first", "Flexible engagement", "Outcome-focused"];
 
-/** Operating principles in place of client logos. */
+/** Oversized infinite ticker of operating principles (static under reduced motion). */
 export function TrustStrip() {
+  const loop = [...principles, ...principles];
   return (
-    <section aria-label="How Domiutra operates" className="border-y border-line">
-      <ul className="container-site flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-6">
-        {principles.map((p, i) => (
-          <li key={p} className="flex items-center gap-2.5 text-sm text-fg-muted">
-            <span className="font-mono text-[0.65rem] text-mint">0{i + 1}</span>
-            {p}
+    <section aria-label="How Domiutra operates" className="overflow-hidden border-y border-line py-7 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+      <ul data-loop="" className="marquee flex w-max items-center gap-10 md:gap-14">
+        {loop.map((p, i) => (
+          <li
+            key={`${p}-${i}`}
+            aria-hidden={i >= principles.length ? true : undefined}
+            className="flex items-center gap-10 whitespace-nowrap text-3xl font-semibold tracking-tight md:gap-14 md:text-5xl"
+          >
+            <span className={cn(i % 2 === 0 ? "text-fg" : "text-transparent [-webkit-text-stroke:1px_rgb(244_247_246/0.45)]")}>{p}</span>
+            <span aria-hidden="true" className="size-2 rounded-full bg-mint shadow-[0_0_16px_rgb(122_240_195/0.8)]" />
           </li>
         ))}
       </ul>

@@ -5,7 +5,6 @@ import { ServicesSection } from "@/components/sections/home/ServicesSection";
 import { WorkflowSection } from "@/components/sections/home/WorkflowSection";
 import { WhySection } from "@/components/sections/home/WhySection";
 import { IndustriesSection } from "@/components/sections/home/IndustriesSection";
-import { InsightsSection } from "@/components/sections/home/InsightsSection";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { buildMetadata } from "@/lib/seo/metadata";
 
@@ -26,8 +25,7 @@ export default function HomePage() {
       <WorkflowSection />
       <WhySection />
       <IndustriesSection />
-      <InsightsSection />
-      <FinalCTA />
+      <FinalCTA title="Let’s build what’s next." body="Tell us what you’re working on." />
     </>
   );
 }

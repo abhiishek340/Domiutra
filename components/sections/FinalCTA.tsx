@@ -1,5 +1,6 @@
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/animations/Reveal";
+import { CursorGlow } from "@/components/animations/CursorGlow";
 
 type Props = {
   title?: string;
@@ -40,6 +41,7 @@ export function FinalCTA({
         })}
       </svg>
       <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink-950 to-transparent" />
+      <CursorGlow />
 
       <div className="container-site relative">
         <Reveal className="max-w-4xl">

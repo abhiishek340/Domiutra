@@ -205,7 +205,7 @@ test.describe("Without JavaScript", () => {
       const hidden = await page.evaluate(() =>
         [...document.querySelectorAll("main *")].filter((el) => {
           const cs = getComputedStyle(el);
-          return el.textContent?.trim() && cs.opacity === "0" && !el.closest("[aria-hidden=true]") && !el.closest(".animate-rise,.animate-fade");
+          return el.textContent?.trim() && cs.opacity === "0" && !el.closest("[aria-hidden=true]") && !el.closest(".animate-rise,.animate-fade,[data-anim]");
         }).length,
       );
       expect(hidden).toBe(0);
