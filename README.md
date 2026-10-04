@@ -33,8 +33,9 @@ cp .env.example .env.local
 | `npm run lint` | Run ESLint |
 | `npm run typecheck` | Run the TypeScript compiler |
 | `npm test` | Run unit and component tests (Vitest) |
+| `npm run test:coverage` | Run unit tests with coverage thresholds |
 | `npm run test:e2e` | Run end-to-end and accessibility tests (Playwright) |
-| `npm run check` | Lint, typecheck, test, and build |
+| `npm run check` | Lint, typecheck, test with coverage, and build |
 
 Before the first E2E run: `npx playwright install chromium`.
 
@@ -119,6 +120,21 @@ The project deploys to [Vercel](https://vercel.com) with no extra configuration:
 3. Deploy, then set `NEXT_PUBLIC_SITE_URL` to your production domain.
 
 Preview deployments are automatically excluded from search indexing.
+
+## Testing
+
+| Layer | Tool | What it covers |
+| --- | --- | --- |
+| Unit and component | Vitest + Testing Library | Business logic, contact API, content loading, SEO, navigation, UI components |
+| Page rendering | Vitest | Every page renders in React's development build with zero console errors |
+| End-to-end | Playwright | Real browser journeys on desktop and mobile, forms, routing, SEO files |
+| Accessibility | axe-core | WCAG 2.2 A/AA checks on key pages |
+
+**Coverage** is enforced: the run fails if total coverage drops below 90% (statements and lines), or below 90% for `lib/` and the contact API. Open `coverage/index.html` after `npm run test:coverage` for the full report.
+
+**CI** runs on every push and pull request (`.github/workflows/ci.yml`): lint, typecheck, unit tests with coverage, build, then E2E and accessibility tests.
+
+Tests live in `tests/unit/` (`*.test.ts[x]`) and `tests/e2e/` (`*.spec.ts`).
 
 ## Notes
 
