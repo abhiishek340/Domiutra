@@ -66,6 +66,8 @@ See [`.env.example`](.env.example) for the full list with descriptions.
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL (used for SEO and the sitemap) |
 | `RESEND_API_KEY`, `CONTACT_EMAIL`, `CONTACT_FROM_EMAIL` | Contact form email delivery |
 | `HUBSPOT_ACCESS_TOKEN` | Optional CRM forwarding |
+| `GEMINI_API_KEY`, `GEMINI_MODEL` | AI brief assistant (Gemini) |
+| `BRIEF_DEMO_MODE` | Local preview of the assistant without a key (`true`) |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | Public email shown on the site |
 | `NEXT_PUBLIC_SCHEDULING_URL` | Booking link ("Schedule a conversation") |
 | `NEXT_PUBLIC_LINKEDIN_URL`, `NEXT_PUBLIC_GITHUB_URL`, `NEXT_PUBLIC_X_URL` | Social links |
@@ -81,6 +83,15 @@ Anything left unset is hidden or reported honestly. For example, the contact for
 3. Redeploy.
 
 Submissions are validated with Zod on both client and server, and protected by a same-origin check, rate limiting, a honeypot field, and a minimum fill time.
+
+## AI brief assistant
+
+Visitors describe their situation and get a first-draft project brief: recommended services, engagement model, team shape, phases, risks, and open questions. It appears on the homepage, at `/brief`, and as a link on the contact page, and can hand the brief straight into the contact form.
+
+1. Create a key in [Google AI Studio](https://aistudio.google.com).
+2. Set `GEMINI_API_KEY` (and optionally `GEMINI_MODEL`), then redeploy.
+
+How it stays safe: the key never leaves the server; Gemini must return a strict JSON shape that is validated with Zod; it can only recommend the six real services; team numbers come from the site's own planner logic; visitor text is treated as data and never stored; requests are rate limited. Without a key the feature is hidden. For a local preview, set `BRIEF_DEMO_MODE=true`.
 
 ## Editing content
 
