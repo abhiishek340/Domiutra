@@ -16,6 +16,7 @@ const pages = [
   "/about",
   "/careers",
   "/contact",
+  "/brief",
   "/security",
   "/privacy",
 ];

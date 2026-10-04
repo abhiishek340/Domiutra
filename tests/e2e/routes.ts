@@ -16,6 +16,7 @@ export const staticRoutes = [
   "/about",
   "/careers",
   "/contact",
+  "/brief",
   "/privacy",
   "/terms",
   "/accessibility",

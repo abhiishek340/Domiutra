@@ -27,6 +27,8 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 240_000,
-    env: { RESEND_API_KEY: "", CONTACT_EMAIL: "", NEXT_PUBLIC_SITE_URL: baseURL },
+    // A placeholder Gemini key enables the brief assistant UI; E2E tests
+    // intercept /api/brief in the browser, so Google is never called.
+    env: { RESEND_API_KEY: "", CONTACT_EMAIL: "", NEXT_PUBLIC_SITE_URL: baseURL, GEMINI_API_KEY: "e2e-placeholder-not-a-real-key" },
   },
 });

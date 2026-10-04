@@ -10,6 +10,7 @@ import { getArticleSlugs } from "@/lib/content/articles";
 
 vi.mock("next/navigation", async (importOriginal) => ({
   ...(await importOriginal<typeof import("next/navigation")>()),
+  useRouter: () => ({ push: () => {} }),
   useSearchParams: () => new URLSearchParams(),
   usePathname: () => "/",
 }));
@@ -90,6 +91,33 @@ describe("static pages render cleanly", () => {
   it.each(pages)("%s", async (_path, load) => {
     const { default: Page } = await load();
     await renderPage(Page());
+  });
+});
+
+describe("brief assistant page", () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  it("renders when a Gemini key is configured", async () => {
+    vi.stubEnv("GEMINI_API_KEY", "test-key");
+    const { default: Page } = await import("@/app/brief/page");
+    await renderPage(Page());
+    expect(screen.getByTestId("brief-assistant")).toBeInTheDocument();
+  });
+
+  it("is a 404 when the assistant is not configured", async () => {
+    vi.stubEnv("GEMINI_API_KEY", "");
+    vi.stubEnv("BRIEF_DEMO_MODE", "");
+    const { default: Page } = await import("@/app/brief/page");
+    expect(() => Page()).toThrow();
+  });
+
+  it("the homepage and contact page show the assistant only when enabled", async () => {
+    const { BriefSection } = await import("@/components/sections/home/BriefSection");
+    vi.stubEnv("GEMINI_API_KEY", "");
+    vi.stubEnv("BRIEF_DEMO_MODE", "");
+    expect(BriefSection()).toBeNull();
+    vi.stubEnv("GEMINI_API_KEY", "test-key");
+    expect(BriefSection()).not.toBeNull();
   });
 });
 
